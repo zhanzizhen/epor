@@ -1,0 +1,33 @@
+{
+  "name": "epor",
+  "version": "0.1.0",
+  "description": "make you easy to write daily/weekly report",
+  "main": "lib/index.js",
+  "module": "lib/index.js",
+  "scripts": {
+    "build": "rollup -c",
+    "publish-plus": "rollup -c && npm publish",
+    "test": "node lib/index.js",
+    "coverage": "jest --coverage"
+  },
+  "keywords": [
+    "daily",
+    "report"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zhanzizhen/epor.git"
+  },
+  "author": "zhanzizhen",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {
+    "jest": "^24.9.0",
+    "rollup": "^1.27.8",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-typescript": "^1.0.1",
+    "tslib": "^1.10.0",
+    "typescript": "^3.7.3"
+  }
+}
