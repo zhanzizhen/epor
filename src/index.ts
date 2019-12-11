@@ -14,18 +14,19 @@ function isInToday(gitTimeStamp: string) {
 }
 
 const logText: string[] = [];
-targetDir.forEach(dir => {
+targetDir.forEach(async dir => {
   fs.readdir(dir, (err, data) => {
-    if (Array.isArray(data)) {
-      data.forEach(fileName => {
-        fs.readFile(`${dir}/${fileName}`, (err, data) => {
-          if (!data) {
-            throw new Error();
-          }
-          logText.push(data.toString("utf-8"));
-        });
-      });
+    if (!Array.isArray(data)) {
+      return;
     }
+    data.forEach(fileName => {
+      fs.readFile(`${dir}/${fileName}`, (err, data) => {
+        if (!data) {
+          throw new Error();
+        }
+        logText.push(data.toString("utf-8"));
+      });
+    });
   });
 });
 
