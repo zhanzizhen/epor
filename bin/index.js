@@ -5,12 +5,17 @@
 const chalk = require("chalk");
 const { consoleVersion, consoleHelp } = require("../runtime/consoleHelp");
 const checkUpdate = require("../runtime/checkUpdate");
+const getConfigAsync = require("../runtime/getConfig");
 
 function executeCommand() {
   const script = process.argv[2];
   switch (script) {
     case undefined:
-      require("../lib");
+      getConfigAsync().then(config => {
+        console.log(config)
+        require("../lib")(config);
+      });
+
       break;
     case "--help":
     case "-h":

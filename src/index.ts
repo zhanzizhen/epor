@@ -1,36 +1,44 @@
 import fs from "fs";
 
-const targetDir: string[] = [
-  "C:/Users/zhanzizhen/Desktop/avg-official-web/.git/logs/refs/heads",
-  "C:/Users/zhanzizhen/Desktop/avg-manage-web/.git/logs/refs/heads",
-  "C:/Users/zhanzizhen/Desktop/avg-wap/.git/logs/refs/heads"
-];
+type messageItem = string;
 
-const USER_NAME = "zhanzizhen";
+interface argType {
+  targetDir: messageItem[];
+  userName: string;
+}
 
 const todayBeginTime = new Date().setHours(0, 0, 0, 0) / 1000;
-function isInToday(gitTimeStamp: string) {
+const logText: messageItem[] = [];
+
+// 判断是否是今天的时间
+function isInToday(gitTimeStamp: string): boolean {
   return Number(gitTimeStamp) >= todayBeginTime;
 }
 
-const logText: string[] = [];
-targetDir.forEach(async dir => {
-  fs.readdir(dir, (err, data) => {
-    if (!Array.isArray(data)) {
-      return;
-    }
-    data.forEach(fileName => {
-      fs.readFile(`${dir}/${fileName}`, (err, data) => {
-        if (!data) {
-          throw new Error();
-        }
-        logText.push(data.toString("utf-8"));
+// 从.git文件夹读取message
+function getMessageFromFile(targetDir: argType["targetDir"]) {
+  targetDir.forEach(async dir => {
+    fs.readdir(dir, (err, data) => {
+      if (err) {
+        throw err;
+      }
+      if (!Array.isArray(data)) {
+        return;
+      }
+      data.forEach(fileName => {
+        fs.readFile(`${dir}/${fileName}`, (err, data) => {
+          if (err || !data) {
+            throw new Error();
+          }
+          logText.push(data.toString());
+        });
       });
     });
   });
-});
+}
 
-function addMessage(commitList: string[], text: string) {
+//
+function addMessage(commitList: messageItem[], text: string) {
   const commitMessage = text.match(/(?<=commit:\s).+/);
   if (commitMessage !== null && commitMessage.length !== 1) {
     throw new Error("数据有误");
@@ -40,14 +48,14 @@ function addMessage(commitList: string[], text: string) {
   }
 }
 
-function getReportFromMessage(): string[] {
+function getReportFromMessage(userName: string): messageItem[] {
   const reportCommitList: string[] = [];
   logText.forEach(branchLogText => {
     const branchLogList = branchLogText.split("\n");
     for (let i = branchLogList.length - 1; i >= 0; i--) {
       const singleLog = branchLogList[i];
       // fing logs created by the user
-      const isBelongsToUser = new RegExp(`[a-z1-9]+ ${USER_NAME} `).test(
+      const isBelongsToUser = new RegExp(`[a-z1-9]+ ${userName} `).test(
         singleLog
       );
       if (isBelongsToUser) {
@@ -62,10 +70,13 @@ function getReportFromMessage(): string[] {
   return reportCommitList;
 }
 
-function logger(list: string[]) {
+function logger(list: messageItem[]) {
   for (let i = 0; i < list.length; i++) {
     console.log(`${i + 1}. ${list[i]}\n`);
   }
 }
 
-setTimeout(() => logger(getReportFromMessage()), 400);
+export default function getReportList({ targetDir, userName }: argType): void {
+  getMessageFromFile(targetDir);
+  setTimeout(() => logger(getReportFromMessage(userName)), 400);
+}
