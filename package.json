@@ -1,15 +1,15 @@
 {
   "name": "epor",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "make you easy to write daily/weekly report",
   "scripts": {
     "build": "rollup -c && rollup -c rollup.config.template.js",
     "publish-plus": "npm run build && npm publish",
-    "test": "npm run build && node lib/index.js",
+    "test": "npm run build && node bin/index.js",
     "coverage": "jest --coverage"
   },
   "bin": {
-    "epor": "lib/index.js"
+    "epor": "bin/index.js"
   },
   "engines": {
     "node": ">=7"
