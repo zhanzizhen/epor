@@ -3,6 +3,9 @@ import path from "path";
 import { iEporConfig } from "./epor.template";
 
 const CONFIG_FILE_NAME = "epor.config.js";
+const appDirectory = fs.realpathSync(process.cwd());
+const resolveApp = (relativePath: string): string =>
+  path.resolve(appDirectory, relativePath);
 
 function getUserHome() {
   return process.env[process.platform == "win32" ? "USERPROFILE" : "HOME"];
@@ -17,7 +20,7 @@ export default function getConfigAsync() {
       resolve(config);
     } else {
       reject();
-      fs.readFile(path.resolve("./template/epor.template.js"), (err, res) => {
+      fs.readFile(resolveApp("template/epor.template.js"), (err, res) => {
         if (err) {
           throw err;
         }
