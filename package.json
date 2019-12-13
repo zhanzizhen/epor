@@ -1,17 +1,15 @@
 {
   "name": "epor",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "make you easy to write daily/weekly report",
-  "main": "lib/index.js",
-  "module": "lib/index.js",
   "scripts": {
-    "build": "rollup -c",
-    "publish-plus": "rollup -c && npm publish",
-    "generate": "node lib/index.js",
+    "build": "rollup -c && rollup -c rollup.config.template.js",
+    "publish-plus": "npm run build && npm publish",
+    "test": "npm run build && node lib/index.js",
     "coverage": "jest --coverage"
   },
   "bin": {
-    "epor": "bin/index.js"
+    "epor": "lib/index.js"
   },
   "engines": {
     "node": ">=7"
@@ -32,16 +30,18 @@
     "yargs": "^15.0.2"
   },
   "devDependencies": {
-    "jest": "^24.9.0",
-    "rollup": "^1.27.8",
-    "rollup-plugin-commonjs": "^10.1.0",
-    "rollup-plugin-node-resolve": "^5.2.0",
-    "rollup-plugin-typescript": "^1.0.1",
-    "tslib": "^1.10.0",
-    "typescript": "^3.7.3",
+    "@types/update-notifier": "^2.5.0",
     "eslint": "^6.1.0",
     "eslint-config-airbnb": "^18.0.0",
     "eslint-plugin-import": "^2.18.2",
-    "eslint-plugin-jsx-a11y": "^6.2.3"
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "jest": "^24.9.0",
+    "rollup": "^1.27.8",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-json": "^4.0.0",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-typescript": "^1.0.1",
+    "tslib": "^1.10.0",
+    "typescript": "^3.7.3"
   }
 }

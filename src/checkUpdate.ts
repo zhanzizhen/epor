@@ -1,9 +1,7 @@
-'use strict';
+import updateNotifier from "update-notifier";
+import pkg from "../package.json";
 
-const updateNotifier = require('update-notifier');
-const pkg = require('../package.json');
-
-module.exports = () => {
+export default () => {
   // Checks for available update and returns an instance
   const notifier = updateNotifier({ pkg });
   // Notify using the built-in convenience method
