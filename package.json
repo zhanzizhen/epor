@@ -1,6 +1,6 @@
 {
   "name": "epor",
-  "version": "0.2.2",
+  "version": "0.3.0",
   "description": "make you easy to write daily/weekly report",
   "scripts": {
     "build": "rollup -c && rollup -c rollup.config.template.js",
@@ -12,8 +12,9 @@
     "epor": "bin/index.js"
   },
   "engines": {
-    "node": ">=7"
+    "node": ">=6"
   },
+  "main": "./lib/index.js",
   "keywords": [
     "daily",
     "report"
