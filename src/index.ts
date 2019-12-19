@@ -2,17 +2,21 @@ import chalk from "chalk";
 import { consoleVersion, consoleHelp } from "./consoleHelp";
 import checkUpdate from "./checkUpdate";
 import getConfigAsync from "./getConfig";
-import { iEporConfig } from "./epor.template";
+import { iEporConfig, genOption } from "./index.d";
 import getReportList from "./getReportList";
 
 function executeCommand() {
   const script = process.argv[2];
+  const option = process.argv[3] as genOption;
   switch (script) {
-    case undefined:
     case "generate":
-      getConfigAsync().then((config) => {
-        getReportList(config as iEporConfig);
-      });
+      getConfigAsync()
+        .then(config => {
+          getReportList(config as iEporConfig, option);
+        })
+        .catch((e: Error) => {
+          chalk.red(e.message);
+        });
       break;
     case "--help":
     case "-h":
@@ -22,6 +26,7 @@ function executeCommand() {
     case "-v":
       consoleVersion();
       break;
+    case undefined:
     default:
       console.log(
         chalk.red(

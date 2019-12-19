@@ -1,6 +1,6 @@
 {
   "name": "epor",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "make you easy to write daily/weekly report",
   "scripts": {
     "build": "rollup -c && rollup -c rollup.config.template.js",

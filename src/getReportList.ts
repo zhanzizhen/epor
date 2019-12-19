@@ -1,13 +1,23 @@
 import fs from "fs";
-import { iEporConfig, messageItem } from "./epor.template";
+import { iEporConfig, messageItem, genOption, targetDir } from "./index.d";
 
-const todayBeginTime = new Date().setHours(0, 0, 0, 0) / 1000;
 const logText: messageItem[] = [];
-type targetDir = iEporConfig["targetDir"];
 
 // 判断是否是今天的时间
-function isInToday(gitTimeStamp: string): boolean {
-  return Number(gitTimeStamp) >= todayBeginTime;
+function isInRange(gitTimeStamp: string, option: genOption): boolean {
+  const todayBeginTime = new Date().setHours(0, 0, 0, 0) / 1000;
+  const yesterDayBeginTime =
+    new Date().setHours(0, 0, 0, 0) / 1000 - 24 * 60 * 60;
+  const value = Number(gitTimeStamp);
+  switch (option) {
+    case undefined:
+      return value >= todayBeginTime;
+    case "--yesterday":
+    case "-y":
+      return value < todayBeginTime && value >= yesterDayBeginTime;
+    default:
+      throw new Error("传给generate的参数不对");
+  }
 }
 
 // 从.git文件夹读取message
@@ -36,14 +46,17 @@ function getMessageFromFile(targetDir: targetDir) {
 function addMessage(commitList: messageItem[], text: string) {
   const commitMessage = text.match(/(?<=commit:\s).+/);
   if (commitMessage !== null && commitMessage.length !== 1) {
-    throw new Error("数据有误");
+    throw new Error("碰到代码逻辑的bug");
   }
   if (commitMessage) {
     commitList.push(commitMessage[0]);
   }
 }
 
-function getReportFromMessage(userName: string): messageItem[] {
+function getReportFromMessage(
+  userName: string,
+  option: genOption
+): messageItem[] {
   const reportCommitList: string[] = [];
   logText.forEach(branchLogText => {
     const branchLogList = branchLogText.split("\n");
@@ -55,7 +68,7 @@ function getReportFromMessage(userName: string): messageItem[] {
       );
       if (isBelongsToUser) {
         const timeStamp = singleLog.match(/(?<=>) \d{10} /);
-        if (!isInToday((timeStamp as RegExpMatchArray)[0])) {
+        if (!isInRange((timeStamp as RegExpMatchArray)[0], option)) {
           break;
         }
         addMessage(reportCommitList, singleLog);
@@ -75,13 +88,12 @@ function padTargetDir(params: targetDir): string[] {
   return params.map(url => `${url}/.git/logs/refs/heads`);
 }
 
-export default function getReportList({
-  targetDir,
-  userName,
-  logger: loggerFromConfig
-}: iEporConfig): void {
+export default function getReportList(
+  { targetDir, userName, logger: loggerFromConfig }: iEporConfig,
+  option: genOption
+): void {
   function printReport() {
-    const reportList = getReportFromMessage(userName);
+    const reportList = getReportFromMessage(userName, option);
     if (reportList.length === 0) {
       console.log("没有找到你今天产生的commit");
       return;

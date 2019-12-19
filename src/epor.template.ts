@@ -1,10 +1,4 @@
-export type messageItem = string;
-
-export interface iEporConfig {
-  targetDir: messageItem[];
-  userName: string;
-  logger?: (reportList: messageItem[]) => void;
-}
+import { iEporConfig } from "./index.d";
 
 const eporConfig: iEporConfig = {
   targetDir: [

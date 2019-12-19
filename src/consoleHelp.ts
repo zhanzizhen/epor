@@ -12,30 +12,13 @@ export function consoleHelp() {
 ${description}
 Version: ${version}
 
-Options:
-  -V, --version  output the version number
-  -h, --help     output usage information
-
 Commands:
-  generate          generate your daily report
-`
-  );
-}
-export function consoleInitHelp() {
-  console.log(
-    `Usage:  cool-cli init [options]
+  generate         generate your daily report
 
 Options:
-  -v, --version      output the version number`
-  );
-}
-export function consoleStartHelp() {
-  console.log(
-    `Usage:  cool-cli start [options]
-
-Options:
-  -V, --version         output the version number
-  -h, --help            output usage information
+  -v, --version    output the version number
+  -h, --help       output usage information
+  -y, --yesterday  output the daily report of yesterday
 `
   );
 }
