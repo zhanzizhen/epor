@@ -1,6 +1,7 @@
 import fs from "fs";
 import path from "path";
 import { iEporConfig } from "./index.d";
+import defaultConfigStr from "./epor.template";
 
 const CONFIG_FILE_NAME = "epor.config.js";
 const appDirectory = fs.realpathSync(process.cwd());
@@ -18,13 +19,8 @@ export default async function getConfigAsync() {
     const config = require(configFilePath) as iEporConfig;
     return config;
   } else {
-    fs.readFile(resolveApp("lib/template/epor.template.js"), (err, res) => {
-      if (err) {
-        throw err;
-      }
-      fs.writeFile(configFilePath, res.toString(), err => {
-        if (err) throw err;
-      });
+    fs.writeFile(configFilePath, defaultConfigStr, err => {
+      if (err) throw err;
     });
     throw new Error(`初次使用，请配置 ${configFilePath}`);
   }

@@ -1,5 +1,5 @@
 // import resolve from "rollup-plugin-node-resolve";
-// import commonjs from "rollup-plugin-commonjs";
+import commonjs from "rollup-plugin-commonjs";
 import typescript from "rollup-plugin-typescript";
 import json from "rollup-plugin-json";
 
@@ -14,18 +14,18 @@ export default [
       // resolve({
       //   preferBuiltins: true,
       // }),
-      // commonjs(),
+      commonjs(),
       typescript(),
       json()
     ],
     external: ["chalk", "fs", "path", "update-notifier", "prompts"]
   },
-  {
-    input: "src/epor.template.ts",
-    output: {
-      file: "lib/template/epor.template.js",
-      format: "cjs"
-    },
-    plugins: [typescript()]
-  }
+  // {
+  //   input: "src/epor.template.ts",
+  //   output: {
+  //     file: "lib/template/epor.template.js",
+  //     format: "cjs"
+  //   },
+  //   plugins: [typescript()]
+  // }
 ];
