@@ -1,6 +1,8 @@
 import getConfigAsync from "../getConfig";
 
-test("test getConfig function", () => {
-  const promise = getConfigAsync();
-  expect(promise instanceof Promise).toBe(true);
+describle("test getConfig function", () => {
+  test("return a promise", () => {
+    const promise = getConfigAsync();
+    expect(promise instanceof Promise).toBe(true);
+  });
 });

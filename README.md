@@ -9,6 +9,7 @@
 epor 的特点如下：
 
 1. 提供模板功能，可配置自己的日报模板（logger 函数）
+2. 上手简单
 
 ## Usage
 
@@ -20,25 +21,13 @@ npm i epor -g
 
 初次使用需要根据命令行提示来配置`epor.template.js`。
 
-然后运行如下命令，便可以生成今日的日报：
+然后运行如下命令，便可以生成日报：
 
 ```cmd
-> epor generate
+> epor
 ```
 
-如果你想生成昨天的，可以这样：
-
-```cmd
->epor generate --yesterday
-```
-
-或者简写：
-
-```cmd
-> epor gen -y
-```
-
-## future feature
+## roadmap
 
 1. 支持周报
 2. 支持月报

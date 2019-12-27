@@ -7,10 +7,10 @@ export function consoleVersion() {
 }
 export function consoleHelp() {
   console.log(
-    `Usage:  epor [command] [options]
-
-${description}
+    `${description}
 Version: ${version}
+
+Usage:  epor [command] [options]
 
 Commands:
   generate         generate your daily report
@@ -18,6 +18,7 @@ Commands:
 Options:
   -v, --version    output the version number
   -h, --help       output usage information
+  -t, --today      output the daily report of today
   -y, --yesterday  output the daily report of yesterday
 `
   );

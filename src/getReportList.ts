@@ -10,7 +10,8 @@ function isInRange(gitTimeStamp: string, option: genOption): boolean {
     new Date().setHours(0, 0, 0, 0) / 1000 - 24 * 60 * 60;
   const value = Number(gitTimeStamp);
   switch (option) {
-    case undefined:
+    case "-t":
+    case "--today":
       return value >= todayBeginTime;
     case "--yesterday":
     case "-y":

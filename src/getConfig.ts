@@ -13,24 +13,19 @@ function getUserHome() {
 
 const configFilePath = `${getUserHome()}/${CONFIG_FILE_NAME}`;
 
-export default function getConfigAsync() {
-  return new Promise((resolve, reject) => {
-    if (fs.existsSync(configFilePath)) {
-      const config = require(configFilePath) as iEporConfig;
-      resolve(config);
-    } else {
-      reject();
-      fs.readFile(resolveApp("template/epor.template.js"), (err, res) => {
-        if (err) {
-          throw err;
-        }
-        fs.writeFile(configFilePath, res.toString(), err => {
-          if (err) throw err;
-          console.log(`
-            初次使用，请配置 ${configFilePath}
-          `);
-        });
+export default async function getConfigAsync() {
+  if (fs.existsSync(configFilePath)) {
+    const config = require(configFilePath) as iEporConfig;
+    return config;
+  } else {
+    fs.readFile(resolveApp("lib/template/epor.template.js"), (err, res) => {
+      if (err) {
+        throw err;
+      }
+      fs.writeFile(configFilePath, res.toString(), err => {
+        if (err) throw err;
       });
-    }
-  });
+    });
+    throw new Error(`初次使用，请配置 ${configFilePath}`);
+  }
 }

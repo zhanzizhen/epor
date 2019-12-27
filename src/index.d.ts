@@ -1,4 +1,4 @@
-export type genOption = "-y" | "--yesterday" | undefined;
+export type genOption = "-y" | "--yesterday" | "--today" | "-t";
 
 export type messageItem = string;
 
