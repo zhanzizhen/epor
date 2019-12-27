@@ -1,6 +1,6 @@
 import fs from "fs";
 import path from "path";
-import { iEporConfig } from "./epor.template";
+import { iEporConfig } from "./index.d";
 
 const CONFIG_FILE_NAME = "epor.config.js";
 const appDirectory = fs.realpathSync(process.cwd());

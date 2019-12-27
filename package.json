@@ -5,7 +5,7 @@
   "scripts": {
     "build": "rollup -c && rollup -c rollup.config.template.js",
     "publish-plus": "npm run build && npm publish",
-    "test": "npm run build && node bin/index.js",
+    "test": "jest",
     "coverage": "jest --coverage"
   },
   "bin": {
@@ -43,6 +43,12 @@
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-typescript": "^1.0.1",
     "tslib": "^1.10.0",
-    "typescript": "^3.7.3"
+    "typescript": "^3.7.3",
+    "@babel/core": "^7.7.2",
+    "@babel/plugin-proposal-class-properties": "^7.7.0",
+    "@babel/plugin-transform-typescript": "^7.7.2",
+    "@babel/preset-env": "^7.7.1",
+    "@babel/preset-react": "^7.7.0",
+    "@babel/preset-typescript": "^7.7.2"
   }
 }
