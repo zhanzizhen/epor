@@ -9,8 +9,8 @@ var eporConfig = {
     ],
     // your global git name, required
     userName: "zhanzizhen",
-    // you can define your individual logger, it's type is (commitList:string[]) => string
-    logger: undefined
+    // can be empty. Or you can define your individual logger: (commitList:string[]) => string
+    logger: undefined,
 };
 
 module.exports = eporConfig;

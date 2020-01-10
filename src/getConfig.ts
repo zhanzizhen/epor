@@ -1,12 +1,8 @@
 import fs from "fs";
-import path from "path";
 import { iEporConfig } from "./index.d";
 import defaultConfigStr from "./epor.template";
 
 const CONFIG_FILE_NAME = "epor.config.js";
-const appDirectory = fs.realpathSync(process.cwd());
-const resolveApp = (relativePath: string): string =>
-  path.resolve(appDirectory, relativePath);
 
 function getUserHome() {
   return process.env[process.platform == "win32" ? "USERPROFILE" : "HOME"];
@@ -22,6 +18,9 @@ export default async function getConfigAsync() {
     fs.writeFile(configFilePath, defaultConfigStr, err => {
       if (err) throw err;
     });
-    throw new Error(`初次使用，请配置 ${configFilePath}`);
+    throw new Error(
+      `初次使用，请先进行配置哦(^-^)
+       配置文件路径： ${configFilePath}`
+    );
   }
 }

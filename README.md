@@ -1,5 +1,7 @@
 # epor
 
+a npm package for being easy to write daily report
+
 ## introduction
 
 写日报对于有些人来说是件烦恼的事情，你不得不在辛勤劳作一天后，还得拼命去回忆今天做了什么。
@@ -9,7 +11,7 @@
 epor 的特点如下：
 
 1. 提供模板功能，可配置自己的日报模板（logger 函数）
-2. 上手简单
+2. 待补充，(强行凑数
 
 ## Usage
 
@@ -19,13 +21,18 @@ epor 的特点如下：
 npm i epor -g
 ```
 
-初次使用需要根据命令行提示来配置`epor.template.js`。
+初次使用需要配置`epor.template.js`，配置文件的位置在命令行会有提示。
 
-然后运行如下命令，便可以生成日报：
+然后运行如下命令，便可以选择生成日报：
 
 ```cmd
 > epor
 ```
+
+## feature
+
+1. 抓取今日的 commit message 生成今日份的日报
+2. 抓取昨日的 commit message 生成昨日份的日报
 
 ## roadmap
 
