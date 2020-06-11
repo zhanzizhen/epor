@@ -1,8 +1,8 @@
 import prompts from "prompts";
-import { genOption } from "./index.d";
+import { Time } from "./index.d";
 
 //
-async function readLine(): Promise<genOption> {
+async function readLine(): Promise<Time> {
   const response = await prompts({
     type: "select",
     name: "value",
@@ -22,7 +22,7 @@ async function readLine(): Promise<genOption> {
         title: "week",
         value: "--week",
         description: "This feature is developing",
-        disabled: true
+        disable: true
       }
     ],
   });

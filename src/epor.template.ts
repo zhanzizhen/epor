@@ -1,14 +1,12 @@
-export default `'use strict';
+import getUserName from "git-user-name";
+
+const configStr = `'use strict';
 
 var eporConfig = {
-    // your workspace, required
-    targetDir: [ 
-        "C:/Users/zhanzizhen/Desktop/avg-official-web",
-        "C:/Users/zhanzizhen/Desktop/avg-manage-web",
-        "C:/Users/zhanzizhen/Desktop/avg-wap"
-    ],
+    // your workspace, required, ezample: "C:/Users/zhanzizhen/Desktop/project-name"
+    targetDir: [],
     // your global git name, required
-    userName: "zhanzizhen",
+    userName: "${getUserName()}",
     // can be empty. Or you can define your individual logger: (commitList:string[]) => string
     logger: undefined,
 };
@@ -16,3 +14,5 @@ var eporConfig = {
 module.exports = eporConfig;
 
 `;
+
+export default configStr;

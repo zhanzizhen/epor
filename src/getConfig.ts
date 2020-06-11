@@ -8,7 +8,7 @@ function getUserHome() {
   return process.env[process.platform == "win32" ? "USERPROFILE" : "HOME"];
 }
 
-const configFilePath = `${getUserHome()}/${CONFIG_FILE_NAME}`;
+export const configFilePath = `${getUserHome()}/${CONFIG_FILE_NAME}`;
 
 export default async function getConfigAsync() {
   if (fs.existsSync(configFilePath)) {

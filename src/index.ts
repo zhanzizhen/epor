@@ -2,34 +2,30 @@ import chalk from "chalk";
 import { consoleVersion, consoleHelp } from "./consoleHelp";
 import checkUpdate from "./checkUpdate";
 import getConfigAsync from "./getConfig";
-import { iEporConfig, genOption } from "./index.d";
+import { iEporConfig, Time } from "./index.d";
 import getReportList from "./getReportList";
 import readLine from "./readLine";
 
-function executeGenerateCommand(option: string) {
-  if (["--yesterday", "-y", "--today", "-t"].includes(option)) {
+function executeGenerateCommand(time: string) {
+  if ((["--yesterday", "-y", "--today", "-t"]).includes(time)) {
     getConfigAsync()
       .then(config => {
-        getReportList(config as iEporConfig, option as genOption);
+        getReportList(config as iEporConfig, time as Time);
       })
       .catch((e: Error) => {
-        // if (e.message === "CONFIG_FILE_NOT_FOUND") {
-        //   console.log(chalk.yellow("初次使用，请配置 ${configFilePath}"));
-        //   return;
-        // }
         console.log(chalk.red(e.message));
       });
     return;
   }
-  console.log(chalk.yellow(`Unsupported option ${chalk.bgRed.bold(option)}.`));
+  console.log(chalk.yellow(`Unsupported option ${chalk.bgRed.bold(time)}.`));
 }
 
 async function executeCommand() {
   const script = process.argv[2];
-  const option = process.argv[3];
+  const time = process.argv[3];
   switch (script) {
     case "generate":
-      executeGenerateCommand(option);
+      executeGenerateCommand(time);
       break;
     case "--help":
     case "-h":

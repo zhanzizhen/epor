@@ -1,29 +1,15 @@
 import fs from "fs";
-import { iEporConfig, messageItem, genOption, targetDir } from "./index.d";
+import { iEporConfig, messageItem, Time, targetDir } from "./index.d";
+import { isInRange, initialLogger, padTargetDir } from "./utils";
+import { configFilePath } from "./getConfig";
 
 const logText: messageItem[] = [];
-
-// 判断是否是今天的时间
-function isInRange(gitTimeStamp: string, option: genOption): boolean {
-  const todayBeginTime = new Date().setHours(0, 0, 0, 0) / 1000;
-  const yesterDayBeginTime =
-    new Date().setHours(0, 0, 0, 0) / 1000 - 24 * 60 * 60;
-  const value = Number(gitTimeStamp);
-  switch (option) {
-    case "-t":
-    case "--today":
-      return value >= todayBeginTime;
-    case "--yesterday":
-    case "-y":
-      return value < todayBeginTime && value >= yesterDayBeginTime;
-    default:
-      throw new Error("传给generate的参数不对");
-  }
-}
+let globalConfig: iEporConfig;
+let globalTime: Time;
 
 // 从.git文件夹读取message
-function getMessageFromFile(targetDir: targetDir) {
-  targetDir.forEach(async dir => {
+function readMessageFromFile(targetDir: targetDir) {
+  targetDir.forEach(async (dir) => {
     fs.readdir(dir, (err, data) => {
       if (err) {
         throw err;
@@ -31,12 +17,12 @@ function getMessageFromFile(targetDir: targetDir) {
       if (!Array.isArray(data)) {
         return;
       }
-      data.forEach(fileName => {
+      data.forEach((fileName) => {
         fs.readFile(`${dir}/${fileName}`, (err, data) => {
           if (err || !data) {
             throw new Error();
           }
-          logText.push(data.toString());
+          handleBranchMessage(data.toString());
         });
       });
     });
@@ -44,65 +30,65 @@ function getMessageFromFile(targetDir: targetDir) {
 }
 
 //
-function addMessage(commitList: messageItem[], text: string) {
-  const commitMessage = text.match(/(?<=commit:\s).+/);
-  if (commitMessage !== null && commitMessage.length !== 1) {
+function addMessage(text: string, timeStamp: number) {
+  const commitMessage = text.match(/\scommit:\s(.+)/);
+  if (commitMessage !== null && commitMessage.length < 2) {
     throw new Error("碰到代码逻辑的bug");
   }
   if (commitMessage) {
-    commitList.push(commitMessage[0]);
+    logText.push({
+      message: commitMessage[1],
+      timeStamp,
+    });
   }
 }
 
-function getReportFromMessage(
-  userName: string,
-  option: genOption
-): messageItem[] {
-  const reportCommitList: string[] = [];
-  logText.forEach(branchLogText => {
-    const branchLogList = branchLogText.split("\n");
-    for (let i = branchLogList.length - 1; i >= 0; i--) {
-      const singleLog = branchLogList[i];
-      // fing logs created by the user
-      const isBelongsToUser = new RegExp(`[a-z1-9]+ ${userName} `).test(
-        singleLog
-      );
-      if (isBelongsToUser) {
-        const timeStamp = singleLog.match(/(?<=>) \d{10} /);
-        if (!isInRange((timeStamp as RegExpMatchArray)[0], option)) {
-          break;
-        }
-        addMessage(reportCommitList, singleLog);
+function handleBranchMessage(branchLogText: string) {
+  if (!globalConfig) {
+    return;
+  }
+  const branchLogList = branchLogText.split("\n");
+  for (let i = branchLogList.length - 1; i >= 0; i--) {
+    const singleLog = branchLogList[i];
+    // fing logs created by the user
+    const isBelongsToUser = new RegExp(
+      `[a-z0-9]{10,50} ${globalConfig.userName} `
+    ).test(singleLog);
+    if (isBelongsToUser) {
+      const timeResult = singleLog.match(/> (\d{8,12}) /);
+      if (!timeResult) {
+        continue;
+      }
+      const timeStamp = Number(timeResult[1]);
+      const { isValid, isOld } = isInRange(timeStamp, globalTime);
+      if (isValid) {
+        addMessage(singleLog, timeStamp);
+      }
+      if (isOld) {
+        break; // 所以后面的都是旧的，不必遍历
       }
     }
-  });
-  return reportCommitList;
-}
-
-function logger(list: messageItem[]) {
-  for (let i = 0; i < list.length; i++) {
-    console.log(`${i + 1}. ${list[i]}\n`);
   }
 }
 
-function padTargetDir(params: targetDir): string[] {
-  return params.map(url => `${url}/.git/logs/refs/heads`);
-}
-
-export default function getReportList(
-  { targetDir, userName, logger: loggerFromConfig }: iEporConfig,
-  option: genOption
-): void {
+export default function getReportList(config: iEporConfig, time: Time): void {
+  const { targetDir, logger = initialLogger } = config;
+  if (!targetDir?.length) {
+    console.log(`请先配置你要抓取的项目目录(targetDir) 
+    配置文件地址：${configFilePath}`);
+    return;
+  }
+  globalConfig = config;
+  globalTime = time;
   function printReport() {
-    const reportList = getReportFromMessage(userName, option);
-    if (reportList.length === 0) {
-      console.log("没有找到你今天产生的commit");
+    if (logText.length === 0) {
+      console.log("没有找到符合的commit");
       return;
     }
-    (loggerFromConfig || logger)(reportList);
+    logger(logText);
   }
 
   const targetDirPaded = padTargetDir(targetDir);
-  getMessageFromFile(targetDirPaded);
+  readMessageFromFile(targetDirPaded);
   setTimeout(printReport, 400);
 }

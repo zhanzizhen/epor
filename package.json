@@ -1,6 +1,6 @@
 {
   "name": "epor",
-  "version": "1.1.0",
+  "version": "1.4.0",
   "description": "make you easy to write daily/weekly report",
   "scripts": {
     "build": "rollup -c",
@@ -27,11 +27,20 @@
   "license": "MIT",
   "dependencies": {
     "chalk": "^3.0.0",
+    "git-user-name": "^2.0.0",
     "prompts": "^2.3.0",
     "update-notifier": "^3.0.1",
     "yargs": "^15.0.2"
   },
   "devDependencies": {
+    "@babel/core": "^7.7.2",
+    "@babel/plugin-proposal-class-properties": "^7.7.0",
+    "@babel/plugin-transform-typescript": "^7.7.2",
+    "@babel/preset-env": "^7.7.1",
+    "@babel/preset-react": "^7.7.0",
+    "@babel/preset-typescript": "^7.7.2",
+    "@types/git-user-name": "^2.0.0",
+    "@types/prompts": "^2.0.3",
     "@types/update-notifier": "^2.5.0",
     "eslint": "^6.1.0",
     "eslint-config-airbnb": "^18.0.0",
@@ -44,13 +53,6 @@
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-typescript": "^1.0.1",
     "tslib": "^1.10.0",
-    "typescript": "^3.7.3",
-    "@babel/core": "^7.7.2",
-    "@babel/plugin-proposal-class-properties": "^7.7.0",
-    "@babel/plugin-transform-typescript": "^7.7.2",
-    "@babel/preset-env": "^7.7.1",
-    "@babel/preset-react": "^7.7.0",
-    "@babel/preset-typescript": "^7.7.2",
-    "@types/prompts": "^2.0.3"
+    "typescript": "^3.7.3"
   }
 }

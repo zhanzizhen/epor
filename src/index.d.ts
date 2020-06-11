@@ -1,9 +1,9 @@
-export type genOption = "-y" | "--yesterday" | "--today" | "-t";
+export type Time = "-y" | "--yesterday" | "--today" | "-t";
 
-export type messageItem = string;
+export type messageItem = { message: string; timeStamp: number };
 
 export interface iEporConfig {
-  targetDir: messageItem[];
+  targetDir: string[];
   userName: string;
   logger?: (reportList: messageItem[]) => void;
 }

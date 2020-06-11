@@ -11,7 +11,7 @@ a npm package for being easy to write daily report
 epor 的特点如下：
 
 1. 提供模板功能，可配置自己的日报模板（logger 函数）
-2. 待补充，(强行凑数
+2. 待补充
 
 ## Usage
 
@@ -21,7 +21,7 @@ epor 的特点如下：
 npm i epor -g
 ```
 
-初次使用需要配置`epor.template.js`，配置文件的位置在命令行会有提示。
+初次使用需要配置`epor.template.js`的抓取目录，配置文件的位置在命令行会有提示。
 
 然后运行如下命令，便可以选择生成日报：
 
