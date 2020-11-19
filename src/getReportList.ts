@@ -1,11 +1,10 @@
 import fs from "fs";
-import { iEporConfig, messageItem, Time, targetDir } from "./index.d";
 import { isInRange, initialLogger, padTargetDir } from "./utils";
 import { configFilePath } from "./getConfig";
 
 const logText: messageItem[] = [];
 let globalConfig: iEporConfig;
-let globalTime: Time;
+let globalTime: TimeOption | number;
 
 // 从.git文件夹读取message
 function readMessageFromFile(targetDir: targetDir) {
@@ -60,18 +59,20 @@ function handleBranchMessage(branchLogText: string) {
         continue;
       }
       const timeStamp = Number(timeResult[1]);
-      const { isValid, isOld } = isInRange(timeStamp, globalTime);
-      if (isValid) {
+      const result = isInRange(timeStamp, globalTime);
+      if (result === "valid") {
         addMessage(singleLog, timeStamp);
-      }
-      if (isOld) {
+      } else if (result === "tooOld") {
         break; // 所以后面的都是旧的，不必遍历
       }
     }
   }
 }
 
-export default function getReportList(config: iEporConfig, time: Time): void {
+export default function getReportList(
+  config: iEporConfig,
+  time: TimeOption | number
+): void {
   const { targetDir, logger = initialLogger } = config;
   if (!targetDir?.length) {
     console.log(`请先配置你要抓取的项目目录(targetDir) 

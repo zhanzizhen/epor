@@ -1,5 +1,4 @@
 import fs from "fs";
-import { iEporConfig } from "./index.d";
 import defaultConfigStr from "./epor.template";
 
 const CONFIG_FILE_NAME = "epor.config.js";

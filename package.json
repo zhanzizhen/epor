@@ -1,12 +1,13 @@
 {
   "name": "epor",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "description": "make you easy to write daily/weekly report",
   "scripts": {
     "build": "rollup -c",
     "publish-plus": "npm run build && npm publish",
     "test": "jest",
-    "coverage": "jest --coverage"
+    "coverage": "jest --coverage",
+    "run-dev": "node lib/index.js"
   },
   "bin": {
     "epor": "bin/index.js"

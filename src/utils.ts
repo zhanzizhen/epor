@@ -1,43 +1,40 @@
-import { Time, messageItem, targetDir } from "./index.d";
+const todayBeginTime = new Date().setHours(0, 0, 0, 0) / 1000;
+const ONE_DAY = 24 * 60 * 60;
 
 export // 判断时间是否合适
 function isInRange(
-  timeStamp: number,
-  time: Time
-): {
-  isValid: boolean;
-  isOld: boolean;
-} {
-  const todayBeginTime = new Date().setHours(0, 0, 0, 0) / 1000;
-  const yesterDayBeginTime = todayBeginTime - 24 * 60 * 60;
-  let isValid: boolean = false;
-  let isOld: boolean = false;
+  timeStamp: number, // 单位是s
+  time: TimeOption | number
+): "valid" | "tooOld" | "tooNew" {
+  let startTime: number;
+  let endTime: number;
   switch (time) {
     case "-t":
     case "--today":
-      if (timeStamp >= todayBeginTime) {
-        isValid = true;
-        isOld = false;
-      } else {
-        isValid = false;
-        isOld = true;
-      }
+      startTime = todayBeginTime - 0 * ONE_DAY;
+      endTime = ONE_DAY + todayBeginTime;
       break;
     case "--yesterday":
     case "-y":
-      if (timeStamp < yesterDayBeginTime) {
-        isValid = false;
-        isOld = true;
-      } else if (timeStamp < todayBeginTime) {
-        isValid = true;
-        isOld = false;
-      }
+      startTime = todayBeginTime - 1 * ONE_DAY;
+      endTime = todayBeginTime;
       break;
+    case "--week":
+      startTime = todayBeginTime - 7 * ONE_DAY;
+      endTime = todayBeginTime;
+      break;
+    default:
+      startTime = time;
+      endTime = time + ONE_DAY;
   }
-  return {
-    isOld,
-    isValid,
-  };
+
+  if (timeStamp < startTime) {
+    return "tooOld";
+  }
+  if (timeStamp > endTime) {
+    return "tooNew";
+  }
+  return "valid";
 }
 
 export function initialLogger(list: messageItem[]) {
