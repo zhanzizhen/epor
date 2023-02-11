@@ -30,7 +30,7 @@
     "chalk": "^3.0.0",
     "git-user-name": "^2.0.0",
     "prompts": "^2.3.0",
-    "update-notifier": "^3.0.1",
+    "update-notifier": "^6.0.2",
     "yargs": "^15.0.2"
   },
   "devDependencies": {
